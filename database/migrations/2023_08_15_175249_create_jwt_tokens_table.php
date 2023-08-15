@@ -15,7 +15,9 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')
                 ->constrained()
-                ->cascadeOnUpdate();
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
+            $table->string('unique_id');
             $table->string('token_title');
             $table->json('restrictions')->nullable();
             $table->json('permissions')->nullable();
