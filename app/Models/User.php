@@ -42,6 +42,9 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
+        'is_admin' => 'bool',
+        'is_marketing' => 'bool',
+        'last_login_at' => 'datetime',
     ];
 
     /**
@@ -49,7 +52,7 @@ class User extends Authenticatable
      *
      * @return array
      */
-    public function uniqueIds()
+    public function uniqueIds(): array
     {
         return ['uuid'];
     }
