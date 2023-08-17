@@ -9,6 +9,16 @@ class JWTToken extends Model
 {
     use HasFactory;
 
+    protected $table = 'jwt_tokens';
+
+    protected $fillable = [
+        'token_title'  ,
+        'unique_id'  ,
+        'expires_at'  ,
+        'last_used_at',
+        'refreshed_at',
+    ];
+
     /**
      * The attributes that should be cast.
      *

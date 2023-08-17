@@ -74,7 +74,7 @@ class MyTokenGuard implements Guard
             'unique_id' => $payload['jti'],
             'token_title' => 'API token'
         ]);
-        
+
         return $token;
     }
 
@@ -101,16 +101,18 @@ class MyTokenGuard implements Guard
             throw new MyJWTTokenMissing('Token missing');
         }
 
-        $this->invalidate($user);
+        $payload = $this->getPayloadFromToken();
+
+        $this->invalidate($user, $payload['jti']);
     }
 
     public function refresh()
     {
     }
 
-    protected function invalidate(User $user): void
+    protected function invalidate(User $user, string $jti): void
     {
-        $user->jwtTokens()->delete();
+        $user->jwtTokens()->where('unique_id', $jti)->delete();
     }
 
 
@@ -148,17 +150,25 @@ class MyTokenGuard implements Guard
         if ($token && $payload = $this->jwt->decode($token)) {
             $user = $this->provider->retrieveById($payload['sub']);
 
-            $tokenModel = $user->jwtToken;
-
-            if ($jwtToken->expires_at->isPast()) {
+            $tokenModel = $user->jwtTokens()->where('unique_id', $payload['jti'])->first();
+            if (empty($tokenModel)) {
+                return;
+            }
+            if ($tokenModel && $tokenModel->expires_at->isPast()) {
                 throw new \Exception('Token expired');
             }
 
-            $jwtToken->last_used_at = now();
-            $jwtToken->save();
+            $tokenModel->last_used_at = now();
+            $tokenModel->save();
             return $this->user = $user;
 
         }
+    }
+
+    protected function getPayloadFromToken(): array
+    {
+        $token = $this->getToken();
+        return $this->jwt->decode($token);
     }
 
     // authenticate

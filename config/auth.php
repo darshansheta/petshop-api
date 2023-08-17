@@ -40,8 +40,8 @@ return [
             'driver' => 'session',
             'provider' => 'users',
         ],
-        'my-jwt' => [
-            'driver' => 'my-token',
+        'jwt' => [
+            'driver' => 'my-jwt',
             'provider' => 'users',
         ],
     ],
