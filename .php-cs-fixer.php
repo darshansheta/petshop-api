@@ -6,21 +6,24 @@ use PhpCsFixer\Finder;
 $rules = [
     'array_syntax' => ['syntax' => 'short'],
     'binary_operator_spaces' => [
-        'default' => 'single_space',
+        'default' => 'at_least_single_space',
         'operators' => ['=>' => null]
     ],
     'blank_line_after_namespace' => true,
     'blank_line_after_opening_tag' => true,
+    'blank_line_between_import_groups' => true,
+    'blank_lines_before_namespace' => true,
     'blank_line_before_statement' => [
         'statements' => ['return']
     ],
     'single_space_around_construct' => true,
     'control_structure_braces' => true,
-    'curly_braces_position' => true,
+    'curly_braces_position' => ['allow_single_line_empty_anonymous_classes' => true],
     'control_structure_continuation_position' => true,
     'declare_parentheses' => true,
     'statement_indentation' => true,
     'no_multiple_statements_per_line' => true,
+    'compact_nullable_typehint' => true,
     'cast_spaces' => true,
     'class_attributes_separation' => [
         'elements' => [
@@ -28,7 +31,7 @@ $rules = [
            'trait_import' => 'none'
         ]
     ],
-    'class_definition' => true,
+    'class_definition' => ['inline_constructor_arguments' => false, 'space_before_parenthesis' => true],
     'concat_space' => [
         'spacing' => 'one'
     ],
@@ -49,6 +52,7 @@ $rules = [
     'constant_case' => true,
     'lowercase_keywords' => true,
     'lowercase_static_reference' => true,    
+    'new_with_braces' => true,    
     'magic_method_casing' => true,
     'magic_constant_casing' => true,
     'method_argument_space' => true,
@@ -91,7 +95,8 @@ $rules = [
     'normalize_index_brace' => true,
     'not_operator_with_successor_space' => false,
     'object_operator_without_whitespace' => true,
-    'ordered_imports' => ['sort_algorithm' => 'alpha'],
+    'ordered_class_elements' => ['order' => ['use_trait']],
+    'ordered_imports' => ['imports_order' => ['class', 'function', 'const'], 'sort_algorithm' => 'none'],
     'phpdoc_indent' => true,
     'general_phpdoc_tag_rename' => true,
     'phpdoc_inline_tag_normalizer' => true,
@@ -105,16 +110,18 @@ $rules = [
     'phpdoc_to_comment' => true,
     'phpdoc_trim' => true,
     'phpdoc_types' => true,
+    'return_type_declaration' => true,
     'phpdoc_var_without_name' => true,
     'psr_autoloading' => true,
     'self_accessor' => true,
     'short_scalar_cast' => true,
     'simplified_null_return' => false,
     'single_blank_line_at_eof' => true,
-    'single_blank_line_before_namespace' => true,
+    // 'single_blank_line_before_namespace' => true,
     'single_class_element_per_statement' => true,
-    'single_import_per_statement' => true,
+    'single_import_per_statement' => ['group_to_single_imports' => false],
     'single_line_after_imports' => true,
+    'single_trait_insert_per_statement' => true,
     'single_line_comment_style' => [
         'comment_types' => ['hash']
     ],
