@@ -34,22 +34,23 @@ class MyJWT
 
     public function encode($payload): string
     {
-    	$now  = new \DateTimeImmutable();
 
     	try {
 	    	return $this->jwtConfig->builder()
 		    		// Configures the issuer (iss claim)
 				    ->issuedBy(Config::get('app.url'))
 				    // Configures the id (jti claim)
-				    ->identifiedBy($payload['identifier'])
+				    ->identifiedBy($payload['jti'])
 				    // Configures the time that the token was issue (iat claim)
-				    ->issuedAt($now)
+				    ->issuedAt($payload['now'])
 				    // Configures the time that the token can be used (nbf claim)
-				    ->canOnlyBeUsedAfter($now->modify('+1 minute'))
+				    ->canOnlyBeUsedAfter($payload['nbf'])
 				    // Configures the expiration time of the token (exp claim)
-				    ->expiresAt($now->modify('+1 day'))
-				    // Configures a new claim, called "uid"
-				    ->withClaim('uid', $payload['uid'])
+				    ->expiresAt($payload['exp'])
+				    // Configures the sub
+				    ->relatedTo($payload['sub'])
+                    // Configures custom claim uuid of user
+                    ->withClaim('uid', $payload['uid'])
 				    // Builds a new token
 				    ->getToken($this->jwtConfig->signer(), $this->jwtConfig->signingKey())
 				    ->toString();
@@ -63,18 +64,8 @@ class MyJWT
         try {
             $token = $this->jwtConfig->parser()->parse($token);
         } catch (\Exception $e) {
-            throw new Exception('Invalid token', $e->getCode(), $e);
+            throw new \Exception('Invalid token', $e->getCode(), $e);
         }
-
-        // if (
-        // 	! $this->jwtConfig->validator()->validate(
-	    //     	$token, 
-	    //     	// ...$this->jwtConfig->validationConstraints()
-	    //     	new RelatedTo('1234567890')
-	    //     )
-    	// ) {
-        //     throw new \Exception('Invalid token: unable to validate');
-        // }
 
         return $token->claims()->all();
     }
