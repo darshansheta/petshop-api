@@ -8,6 +8,7 @@ use Illuminate\Contracts\Auth\UserProvider;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Services\Auth\Exceptions\MyJWTUserHasTokenException;
+use Illuminate\Support\Str;
 
 class MyTokenGuard implements Guard
 {
@@ -23,21 +24,6 @@ class MyTokenGuard implements Guard
     public function getToken(): string
     {
         return $this->request->bearerToken();
-    }
-
-    public function user()
-    {
-        if ($this->user !== null) {
-            return $this->user;
-        }
-
-        $token = $this->getToken();
-        if ($token &&
-            ($payload = $this->jwt->check(true)) &&
-            $this->validateSubject()
-        ) {
-            return $this->user = $this->provider->retrieveById($payload['sub']);
-        }
     }
 
     public function userOrFail()
@@ -74,9 +60,9 @@ class MyTokenGuard implements Guard
 
     protected function issueToken(User $user)
     {
-        if ($this->checkUserHasToken()){
-            throw new MyJWTUserHasTokenException("User has token");
-        }
+        // if ($this->checkUserHasToken($user)){
+        //     throw new MyJWTUserHasTokenException("User has token");
+        // }
 
         $payload = $this->getPayload($user);
 
@@ -88,7 +74,7 @@ class MyTokenGuard implements Guard
             'unique_id' => $payload['jti'],
             'token_title' => 'API token'
         ]);
-
+        
         return $token;
     }
 

@@ -42,7 +42,7 @@ class MyJWT
 				    // Configures the id (jti claim)
 				    ->identifiedBy($payload['jti'])
 				    // Configures the time that the token was issue (iat claim)
-				    ->issuedAt($payload['now'])
+				    ->issuedAt($payload['iat'])
 				    // Configures the time that the token can be used (nbf claim)
 				    ->canOnlyBeUsedAfter($payload['nbf'])
 				    // Configures the expiration time of the token (exp claim)
@@ -55,6 +55,7 @@ class MyJWT
 				    ->getToken($this->jwtConfig->signer(), $this->jwtConfig->signingKey())
 				    ->toString();
 			} catch (\Exception $e) {
+                throw $e;
             throw new \Exception('Exception while creating token: ', $e->getCode(), $e);
         }
         }
