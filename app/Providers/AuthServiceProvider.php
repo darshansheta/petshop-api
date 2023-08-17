@@ -2,8 +2,11 @@
 
 namespace App\Providers;
 
+use Illuminate\Support\Facades\Auth;
 // use Illuminate\Support\Facades\Gate;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
+use App\Services\Auth\MyTokenGuard;
+use App\Services\Auth\MyJWT;
 
 class AuthServiceProvider extends ServiceProvider
 {
@@ -21,6 +24,12 @@ class AuthServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        $this->app->bind('my-jwt.core', function ($app) {
+          return new MyJWT;
+        });
+        // add custom guard 
+        Auth::extend('my-jwt', function ($app, $name, array $config) {
+          return new MyTokenGuard($app['my-jwt.core'], Auth::createUserProvider($config['provider'])  $app->make('request'));
+        });
     }
 }
