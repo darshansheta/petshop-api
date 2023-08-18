@@ -58,7 +58,7 @@ class MyTokenGuard implements Guard
         return (bool) $user->jwtTokens()->count();
     }
 
-    protected function issueToken(User $user)
+    public function issueToken(User $user)
     {
         // if ($this->checkUserHasToken($user)){
         //     throw new MyJWTUserHasTokenException("User has token");
