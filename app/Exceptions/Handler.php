@@ -3,6 +3,8 @@
 namespace App\Exceptions;
 
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Validation\ValidationException;
+use Illuminate\Http\JsonResponse;
 use Throwable;
 
 class Handler extends ExceptionHandler
@@ -26,5 +28,21 @@ class Handler extends ExceptionHandler
         $this->reportable(function (Throwable $e) {
             //
         });
+    }
+
+    public function render($request, Throwable $e)
+    {
+        return match (true) {
+            $e instanceof ValidationException => $this->convertValidationExceptionToResponse($e, $request),
+            default => parent::render($request, $e),
+        };
+    }
+
+    protected function convertValidationExceptionToResponse(ValidationException $exception, $request)
+    {
+        return response()->json([
+            'error' => $exception->getMessage(),
+            'errors' => $exception->errors(),
+        ], $exception->status);
     }
 }
