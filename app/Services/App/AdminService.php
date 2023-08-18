@@ -9,7 +9,7 @@ use Auth;
 
 class AdminService
 {
-    public function createAdmin (array $data): User
+    public function createAdmin(array $data): User
     {
         $user = new User;
 

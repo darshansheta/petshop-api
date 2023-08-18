@@ -9,6 +9,7 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Builder;
 
 class User extends Authenticatable
 {
@@ -61,5 +62,15 @@ class User extends Authenticatable
     public function jwtTokens(): HasMany
     {
         return $this->hasMany(JWTToken::class);
+    }
+
+    public function getRouteKeyName(): string
+    {
+        return 'uuid';
+    }
+
+    public function scopeCustomer(Builder $query): void
+    {
+        $query->where('is_admin',0);
     }
 }
