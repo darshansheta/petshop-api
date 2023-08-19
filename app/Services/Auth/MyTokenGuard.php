@@ -8,6 +8,7 @@ use Illuminate\Contracts\Auth\UserProvider;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Services\Auth\Exceptions\MyJWTUserHasTokenException;
+use App\Services\Auth\Exceptions\MYJWTTokenExpired;
 use Illuminate\Support\Str;
 
 class MyTokenGuard implements Guard
@@ -21,7 +22,7 @@ class MyTokenGuard implements Guard
         $this->request = $request;
     }
 
-    public function getToken(): string
+    public function getToken(): ?string
     {
         return $this->request->bearerToken();
     }
@@ -155,7 +156,7 @@ class MyTokenGuard implements Guard
                 return;
             }
             if ($tokenModel && $tokenModel->expires_at->isPast()) {
-                throw new \Exception('Token expired');
+                throw new MYJWTTokenExpired('Token expired');
             }
 
             $tokenModel->last_used_at = now();

@@ -20,15 +20,16 @@ class MyJWT
 
     protected function createConfigure(): Configuration
     {
-    	return Configuration::forSymmetricSigner(
-    		new Signer\Hmac\Sha256(),
-    		InMemory::plainText(Config::get('my-jwt.secret')),
-    	);
+    	// return Configuration::forSymmetricSigner(
+    	// 	new Signer\Hmac\Sha256(),
+    	// 	InMemory::plainText(Config::get('my-jwt.secret')),
+    	// );
     	return Configuration::forAsymmetricSigner(
     	    new Signer\Rsa\Sha256(),
-    	    InMemory::file(Config::get('my-jwt.public')),
+            InMemory::file(Config::get('my-jwt.private')),
+    	    InMemory::file(Config::get('my-jwt.public'))
     	    // InMemory::plainText(Config::get('my-jwt.private'))
-    	    InMemory::file(Config::get('my-jwt.private'))
+    	    
     	);
     }
 

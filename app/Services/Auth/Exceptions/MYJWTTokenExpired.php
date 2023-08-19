@@ -3,9 +3,12 @@
 namespace App\Services\Auth\Exceptions;
 
 use Exception;
-class MyJWTUserHasTokenException extends Exception
+use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+
+class MYJWTTokenExpired extends Exception
 {
-	protected $message = "User has token";
+	protected $message = "token expired";
 
 	public function render(Request $request): Response
 	{
