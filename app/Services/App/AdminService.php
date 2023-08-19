@@ -13,7 +13,7 @@ class AdminService
     {
         $user = new User;
 
-        $user->is_admin = 0;
+        $user->is_admin = 1;
         $user->first_name = $data['first_name'];
         $user->last_name = $data['last_name'];
         $user->email = $data['email'];

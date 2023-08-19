@@ -17,7 +17,7 @@ Route::prefix('admin')->name('admin.')->group( function () {
         Route::controller(UsersController::class)->name('user.')->group(function() {
             Route::get('/user-listing', 'index')->name('listing');
             Route::put('/user-edit/{user}', 'update')->name('edit');
-            Route::delete('/user-delete/{user}', 'index')->name('delete');
+            Route::delete('/user-delete/{user}', 'delete')->name('delete');
         });
     });
 });

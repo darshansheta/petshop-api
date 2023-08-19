@@ -101,4 +101,30 @@ class AdminUserService
 
     	return $query;
     }
+
+    public function updateUser(User $user, array $data): User
+    {
+    	$user->first_name = $data['first_name'];
+        $user->last_name = $data['last_name'];
+        $user->email = $data['email'];
+        $user->password = $data['password'];
+        $user->avatar = $data['avatar'] ?? null;
+        $user->address = $data['address'];
+        $user->phone_number = $data['phone_number'];
+        $user->is_marketing = empty($data['is_marketing']) ? 0 : 1;
+
+        $user->save();
+
+        return $user;
+    }
+
+    public function deleteUser(User $user): void
+    {
+    	// Do pre delete process
+
+    	// Delete user
+    	$user->delete();
+
+    	//Do post delete process
+    }
 }

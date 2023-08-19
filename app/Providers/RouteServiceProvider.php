@@ -7,6 +7,7 @@ use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvi
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Facades\Route;
+use App\Models\User;
 
 class RouteServiceProvider extends ServiceProvider
 {
@@ -45,6 +46,10 @@ class RouteServiceProvider extends ServiceProvider
                 ->prefix('api/v1')
                 ->name('api.v1.')
                 ->group(base_path('routes/v1/api.php'));
+
+            Route::bind('user', function (string $value) {
+                return User::where('uuid', $value)->customer()->firstOrFail();
+            });
         });
     }
 }
