@@ -29,7 +29,11 @@ class AuthServiceProvider extends ServiceProvider
         });
         // add custom guard 
         Auth::extend('my-jwt', function ($app, $name, array $config) {
-          return new MyTokenGuard($app['my-jwt.core'], Auth::createUserProvider($config['provider']),  $app->make('request'));
+          $guard = new MyTokenGuard($app['my-jwt.core'], Auth::createUserProvider($config['provider']),  $app->make('request'));
+
+          $app->refresh('request', $guard, 'setRequest');
+
+          return $guard;
         });
     }
 }

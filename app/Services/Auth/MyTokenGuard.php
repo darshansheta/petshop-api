@@ -127,6 +127,13 @@ class MyTokenGuard implements Guard
         return $this->getPayload();
     }
 
+    public function setRequest(Request $request): MyTokenGuard
+    {
+        $this->request = $request;
+
+        return $this;
+    }
+
     /**
      * Set the token.
      *
