@@ -10,7 +10,7 @@ class MyJWTTokenMissing extends Exception
 	public function render(Request $request): Response
 	{
 		return response([
-			'error' => 'Unauthorized. '. $this->message,
+			'error' => 'Unauthorized, '. $this->message,
 		], 401);
 	}
 }
