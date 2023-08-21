@@ -45,4 +45,9 @@ class Handler extends ExceptionHandler
             'errors' => $exception->errors(),
         ], $exception->status);
     }
+
+    protected function shouldReturnJson($request, Throwable $e)
+    {
+        return true;
+    }
 }
