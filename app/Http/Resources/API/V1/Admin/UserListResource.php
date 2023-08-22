@@ -4,7 +4,11 @@ namespace App\Http\Resources\API\V1\Admin;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use App\Models\User;
 
+/**
+ * @mixin \App\Models\User
+ */
 class UserListResource extends JsonResource
 {
     /**

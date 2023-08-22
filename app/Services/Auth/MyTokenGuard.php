@@ -10,10 +10,32 @@ use App\Models\User;
 use App\Services\Auth\Exceptions\MyJWTUserHasTokenException;
 use App\Services\Auth\Exceptions\MYJWTTokenExpired;
 use Illuminate\Support\Str;
+use App\Services\Auth\Exceptions\MyJWTTokenMissing;
 
 class MyTokenGuard implements Guard
 {
     use GuardHelpers;
+
+    /**
+     * The user provider implementation.
+     *
+     * @var \App\Services\Auth\MyJWT
+     */
+    protected $jwt;
+    
+    /**
+     * The user provider implementation.
+     *
+     * @var \Illuminate\Contracts\Auth\UserProvider
+     */
+    protected $provider;
+
+    /**
+     * The request instance.
+     *
+     * @var \Illuminate\Http\Request
+     */
+    protected $request;
 
     public function __construct(MyJWT $jwt, UserProvider $provider, Request $request)
     {
@@ -25,15 +47,6 @@ class MyTokenGuard implements Guard
     public function getToken(): ?string
     {
         return $this->request->bearerToken();
-    }
-
-    public function userOrFail()
-    {
-        if (!$user = $this->user()) {
-            throw new UserNotDefinedException;
-        }
-
-        return $user;
     }
 
     public function validate(array $credentials = [])
@@ -59,7 +72,13 @@ class MyTokenGuard implements Guard
         return (bool) $user->jwtTokens()->count();
     }
 
-    public function issueToken(User $user)
+    /**
+     * Retrieve a user by their unique identifier.
+     *
+     * @param  \Illuminate\Contracts\Auth\Authenticatable  $user
+     * @return string $token
+     */
+    public function issueToken($user): string
     {
         // if ($this->checkUserHasToken($user)){
         //     throw new MyJWTUserHasTokenException("User has token");
@@ -79,13 +98,19 @@ class MyTokenGuard implements Guard
         return $token;
     }
 
-    protected function getPayload(User $user): array
+    /**
+     * Retrieve a user by their unique identifier.
+     *
+     * @param  \Illuminate\Contracts\Auth\Authenticatable|\App\Models\User  $user
+     * @return array $payload
+     */
+    protected function getPayload($user): array
     {
         $now  = new \DateTimeImmutable();
 
         return [
-            'sub' => $user->id,
-            'uid' => $user->uuid,
+            'sub' => $user->getAuthIdentifier(),
+            'uid' => $user->uuid, /** @phpstan-ignore-line */
             'jti' => Str::random(),
             'iat' => $now,
             'nbf' => $now->modify('+1 minute'),
@@ -116,17 +141,6 @@ class MyTokenGuard implements Guard
         $user->jwtTokens()->where('unique_id', $jti)->delete();
     }
 
-
-    /**
-     * Alias for getPayload().
-     *
-     * @return \Tymon\JWTAuth\Payload
-     */
-    public function payload()
-    {
-        return $this->getPayload();
-    }
-
     public function setRequest(Request $request): MyTokenGuard
     {
         $this->request = $request;
@@ -135,18 +149,10 @@ class MyTokenGuard implements Guard
     }
 
     /**
-     * Set the token.
+     * Retrieve a user by their unique identifier.
      *
-     * @param  \Tymon\JWTAuth\Token|string  $token
-     * @return $this
+     * @return  \Illuminate\Contracts\Auth\Authenticatable|null  $user
      */
-    public function setToken($token)
-    {
-        $this->jwt->setToken($token);
-
-        return $this;
-    }
-
     public function user()
     {
         if (!empty($this->user)) {
@@ -160,12 +166,14 @@ class MyTokenGuard implements Guard
 
             $tokenModel = $user->jwtTokens()->where('unique_id', $payload['jti'])->first();
             if (empty($tokenModel)) {
-                return;
+                return null;
             }
+            /** @phpstan-ignore-next-line */
             if ($tokenModel && $tokenModel->expires_at->isPast()) {
                 throw new MYJWTTokenExpired('Token expired');
             }
 
+            /** @phpstan-ignore-next-line */
             $tokenModel->last_used_at = now();
             $tokenModel->save();
             return $this->user = $user;

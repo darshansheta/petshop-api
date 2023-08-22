@@ -3,6 +3,9 @@
 namespace App\Services\Auth\Exceptions;
 
 use Exception;
+use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+
 class MyJWTUserHasTokenException extends Exception
 {
 	protected $message = "User has token";

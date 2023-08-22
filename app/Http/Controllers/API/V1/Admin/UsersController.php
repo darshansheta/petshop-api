@@ -131,8 +131,8 @@ class UsersController extends Controller
     public function index(Request $request): UserListCollection
     {
         $pagination = [
-            'page' => $request->query('page', 1),
-            'perPage' => $request->query('limit', 15),
+            'page' => $request->query('page', '1'),
+            'perPage' => $request->query('limit', '15'),
         ];
 
         $orderBy = [

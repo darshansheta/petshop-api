@@ -56,9 +56,8 @@ class MyJWT
 				    ->getToken($this->jwtConfig->signer(), $this->jwtConfig->signingKey())
 				    ->toString();
 			} catch (\Exception $e) {
-                throw $e;
-            throw new \Exception('Exception while creating token: ', $e->getCode(), $e);
-        }
+                throw new \Exception('Exception while creating token: ', $e->getCode(), $e);
+            }
         }
 
     public function decode($token)

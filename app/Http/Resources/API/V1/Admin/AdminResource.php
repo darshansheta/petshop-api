@@ -6,6 +6,9 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Auth;
 
+/**
+ * @mixin \App\Models\User
+ */
 class AdminResource extends JsonResource
 {
     /**
