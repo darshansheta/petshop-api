@@ -187,6 +187,6 @@ return [
 
     'admin' => [
         'email' => env('ADMIN_EMAIL', 'admin@buckhill.co.uk'),
-        'password' => env('ADMIN_PASSWORD', 'admin')
-    ] 
+        'password' => env('ADMIN_PASSWORD', 'admin'),
+    ],
 ];

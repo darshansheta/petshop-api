@@ -2,7 +2,6 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
@@ -18,13 +17,13 @@ class AdminSeeder extends Seeder
         $adminPassword = config('app.admin.password');
 
         if (User::where('email', $adminEmail)->exists()) {
-            return ;
+            return;
         }
 
         User::factory()->create([
             'email' => $adminEmail,
             'password' => Hash::make($adminPassword),
-            'is_admin' => 1
+            'is_admin' => 1,
         ]);
     }
 }

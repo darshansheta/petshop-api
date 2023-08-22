@@ -2,9 +2,6 @@
 
 namespace App\Services\App;
 
-use App\Models\User;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Validation\ValidationException;
 use Auth;
 
 class AuthService
@@ -19,4 +16,3 @@ class AuthService
         Auth::guard('jwt')->logout();
     }
 }
-

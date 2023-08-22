@@ -29,7 +29,7 @@ use Illuminate\Routing\Controller as BaseController;
  *     name="PetShop",
  *     description="API Endpoints of PetShop"
  * )
-  * @OA\SecurityScheme(
+ * @OA\SecurityScheme(
  *     type="http",
  *     description="Login with email and password to get the authentication token",
  *     name="Token based Based",
@@ -41,5 +41,6 @@ use Illuminate\Routing\Controller as BaseController;
  */
 class Controller extends BaseController
 {
-    use AuthorizesRequests, ValidatesRequests;
+    use AuthorizesRequests;
+    use ValidatesRequests;
 }

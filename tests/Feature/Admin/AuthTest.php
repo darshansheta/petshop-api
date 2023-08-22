@@ -9,13 +9,14 @@ use App\Models\User;
 
 class AuthTest extends TestCase
 {
-    use RefreshDatabase, WithFaker;
+    use RefreshDatabase;
+    use WithFaker;
 
     public function setUp(): void
     {
         parent::setUp();
     }
-    
+
     /**
      * @test
      */
@@ -26,13 +27,13 @@ class AuthTest extends TestCase
         $response = $this->postJson(route('api.v1.admin.login'), $params);
 
         $response->assertStatus(422);
-        
+
         $response->assertJsonStructure([
             'error',
             'errors' => [
                 'email',
-                'password'
-            ]
+                'password',
+            ],
         ]);
     }
 
@@ -43,7 +44,7 @@ class AuthTest extends TestCase
     {
         $params = [
             'email' => $this->faker->safeEmail,
-            'password' => $this->faker->password
+            'password' => $this->faker->password,
         ];
 
         $response = $this->postJson(route('api.v1.admin.login'), $params);
@@ -75,7 +76,7 @@ class AuthTest extends TestCase
 
         $response->assertJsonStructure([
             'token',
-            'success'
+            'success',
         ]);
 
         $adminUser = User::whereEmail($adminEmail)->firstOrFail();
@@ -84,12 +85,12 @@ class AuthTest extends TestCase
 
         $this->assertEquals($payload['sub'], $adminUser->id);
         $this->assertEquals($payload['uid'], $adminUser->uuid);
- 
+
         $response
             ->assertStatus(200);
 
         $this->withHeaders([
-                'Authorization' => 'Bearer '. $response->json()['token']
+                'Authorization' => 'Bearer ' . $response->json()['token'],
             ])
             ->getJson(route('api.v1.admin.user.listing'))
             ->assertOk();
@@ -117,7 +118,7 @@ class AuthTest extends TestCase
         // $this->actingAs($adminUser);
 
         $response = $this->withHeaders([
-                    'Authorization' => 'Bearer '. $response->json()['token']
+                    'Authorization' => 'Bearer ' . $response->json()['token'],
                 ])
                 ->deleteJson(route('api.v1.admin.logout'));
 
@@ -125,7 +126,7 @@ class AuthTest extends TestCase
 
         $response->assertJson([
             'success' => 1,
-            'message' => 'Token Revoked'
+            'message' => 'Token Revoked',
         ]);
     }
 }

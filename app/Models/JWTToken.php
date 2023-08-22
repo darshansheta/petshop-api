@@ -12,9 +12,9 @@ class JWTToken extends Model
     protected $table = 'jwt_tokens';
 
     protected $fillable = [
-        'token_title'  ,
-        'unique_id'  ,
-        'expires_at'  ,
+        'token_title',
+        'unique_id',
+        'expires_at',
         'last_used_at',
         'refreshed_at',
     ];

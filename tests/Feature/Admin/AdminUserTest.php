@@ -9,7 +9,8 @@ use App\Models\User;
 
 class AdminUserTest extends TestCase
 {
-    use RefreshDatabase, WithFaker;
+    use RefreshDatabase;
+    use WithFaker;
 
     public function setUp(): void
     {
@@ -39,7 +40,7 @@ class AdminUserTest extends TestCase
                 'password_confirmation',
                 'address',
                 'phone_number',
-            ]
+            ],
         ]);
     }
 
@@ -155,7 +156,7 @@ class AdminUserTest extends TestCase
             'error',
             'errors' => [
                 'email',
-            ]
+            ],
         ]);
 
         $this->assertEquals($response->json('error'), 'The email has already been taken.');
@@ -174,7 +175,7 @@ class AdminUserTest extends TestCase
 
         $response->assertJson([
             'success' => 1,
-            'message' => 'User deleted'
+            'message' => 'User deleted',
         ]);
 
         $this->assertDatabaseMissing('users', ['id' => $user->id]);

@@ -22,7 +22,7 @@ class MyTokenGuard implements Guard
      * @var \App\Services\Auth\MyJWT
      */
     protected $jwt;
-    
+
     /**
      * The user provider implementation.
      *
@@ -92,7 +92,7 @@ class MyTokenGuard implements Guard
             'expires_at'   => $payload['exp'],
             'last_used_at' => now(),
             'unique_id' => $payload['jti'],
-            'token_title' => 'API token'
+            'token_title' => 'API token',
         ]);
 
         return $token;
@@ -110,7 +110,7 @@ class MyTokenGuard implements Guard
 
         return [
             'sub' => $user->getAuthIdentifier(),
-            'uid' => $user->uuid, /** @phpstan-ignore-line */
+            'uid' => $user->uuid, /* @phpstan-ignore-line */
             'jti' => Str::random(),
             'iat' => $now,
             'nbf' => $now->modify('+1 minute'),
@@ -141,7 +141,7 @@ class MyTokenGuard implements Guard
         $user->jwtTokens()->where('unique_id', $jti)->delete();
     }
 
-    public function updateRequest(Request $request): MyTokenGuard
+    public function updateRequest(Request $request): self
     {
         $this->request = $request;
 
@@ -168,14 +168,15 @@ class MyTokenGuard implements Guard
             if (empty($tokenModel)) {
                 return null;
             }
-            /** @phpstan-ignore-next-line */
+            /* @phpstan-ignore-next-line */
             if ($tokenModel && $tokenModel->expires_at->isPast()) {
                 throw new MYJWTTokenExpired('Token expired');
             }
 
-            /** @phpstan-ignore-next-line */
+            /* @phpstan-ignore-next-line */
             $tokenModel->last_used_at = now();
             $tokenModel->save();
+
             return $this->user = $user;
 
         }
@@ -184,6 +185,7 @@ class MyTokenGuard implements Guard
     protected function getPayloadFromToken(): array
     {
         $token = $this->getToken();
+
         return $this->jwt->decode($token);
     }
 

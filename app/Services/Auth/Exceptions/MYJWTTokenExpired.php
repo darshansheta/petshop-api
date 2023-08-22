@@ -8,12 +8,12 @@ use Illuminate\Http\Response;
 
 class MYJWTTokenExpired extends Exception
 {
-	protected $message = "token expired";
+    protected $message = 'token expired';
 
-	public function render(Request $request): Response
-	{
-		return response([
-			'error' => 'Unauthorized, '. $this->message,
-		], 401);
-	}
+    public function render(Request $request): Response
+    {
+        return response([
+            'error' => 'Unauthorized, ' . $this->message,
+        ], 401);
+    }
 }

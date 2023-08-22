@@ -3,15 +3,16 @@
 namespace App\Http\Controllers\API\V1\Admin;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\Services\App\AuthService;
 use App\Http\Requests\API\V1\Admin\Auth\LoginRequest;
 
 class AuthController extends Controller
 {
-    public function __construct(protected AuthService $authService) {}
-    
+    public function __construct(protected AuthService $authService)
+    {
+    }
+
     /**
      * @OA\Post(
      *      path="/admin/login",
@@ -61,11 +62,11 @@ class AuthController extends Controller
                 'token' => $token,
                 'success' => 1,
             ]);
-        } 
+        }
 
         return response([
             'success' => 0,
-            'error' => "Failed to authenticate user"
+            'error' => 'Failed to authenticate user',
         ], 401);
     }
 
@@ -93,7 +94,7 @@ class AuthController extends Controller
 
         return response([
             'success' => 1,
-            'message' => 'Token Revoked'
+            'message' => 'Token Revoked',
         ]);
     }
 }

@@ -8,12 +8,12 @@ use Illuminate\Http\Response;
 
 class MyJWTUserHasTokenException extends Exception
 {
-	protected $message = "User has token";
+    protected $message = 'User has token';
 
-	public function render(Request $request): Response
-	{
-		return response([
-			'error' => 'Unauthorized, '. $this->message,
-		], 401);
-	}
+    public function render(Request $request): Response
+    {
+        return response([
+            'error' => 'Unauthorized, ' . $this->message,
+        ], 401);
+    }
 }

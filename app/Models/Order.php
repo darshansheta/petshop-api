@@ -8,7 +8,8 @@ use Illuminate\Database\Eloquent\Concerns\HasUuids;
 
 class Order extends Model
 {
-    use HasUuids, HasFactory;
+    use HasUuids;
+    use HasFactory;
 
     public function uniqueIds(): array
     {

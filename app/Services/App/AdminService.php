@@ -3,15 +3,12 @@
 namespace App\Services\App;
 
 use App\Models\User;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Validation\ValidationException;
-use Auth;
 
 class AdminService
 {
     public function createAdmin(array $data): User
     {
-        $user = new User;
+        $user = new User();
 
         $user->is_admin = 1;
         $user->first_name = $data['first_name'];
