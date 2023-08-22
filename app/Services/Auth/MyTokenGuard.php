@@ -141,7 +141,7 @@ class MyTokenGuard implements Guard
         $user->jwtTokens()->where('unique_id', $jti)->delete();
     }
 
-    public function setRequest(Request $request): MyTokenGuard
+    public function updateRequest(Request $request): MyTokenGuard
     {
         $this->request = $request;
 

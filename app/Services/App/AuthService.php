@@ -19,3 +19,4 @@ class AuthService
         Auth::guard('jwt')->logout();
     }
 }
+
