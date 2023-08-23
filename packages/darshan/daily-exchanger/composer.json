@@ -10,7 +10,8 @@
     "license": "MIT",
     "autoload": {
         "psr-4": {
-            "Darshan\\DailyExchanger\\": "src/"
+            "Darshan\\DailyExchanger\\": "src/",
+            "Darshan\\DailyExchanger\\Tests\\": "tests/"
         }
     },
     "extra": {

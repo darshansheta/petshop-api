@@ -19,7 +19,7 @@ class DailyExchanger
 
     protected string $defaultCurrency = 'EUR';
 
-    protected function fetchAndCacheRates(): void
+    public function fetchRates(): array
     {
         $client = new Client;
         $response = $client->get($this->url);
@@ -36,15 +36,18 @@ class DailyExchanger
             return $carry;
         }, []);
 
+        return $rates;
+    }
+
+    protected function fetchAndCacheRates(): void
+    {
+        $rates = $this->fetchRates();
+
         Cache::put($this->cacheKey.'.rates', $rates);
     }
-   
-   public function convertTo(string $currency, $amount)
-   {
-        if (!is_numeric($amount)) {
-            throw new InvalidAmountException($amount.' is not a valid amount.');   
-        }
 
+    public function getRates()
+    {
         $dayOf = Cache::get($this->cacheKey.'.date');
 
         if ($dayOf != now()->format("Y-m-d") || !Cache::has($this->cacheKey.'.rates')) {
@@ -53,7 +56,16 @@ class DailyExchanger
             $this->fetchAndCacheRates();
         }
 
-        $rates = Cache::get($this->cacheKey.'.rates');
+        return Cache::get($this->cacheKey.'.rates');
+    }
+   
+   public function convertTo(string $currency, $amount)
+   {
+        if (!is_numeric($amount)) {
+            throw new InvalidAmountException($amount.' is not a valid amount.');   
+        }
+
+        $rates = $this->getRates();
 
         //check if user passed a valid currency
         if (! array_key_exists($currency, $rates)) {

@@ -167,7 +167,7 @@
                 },
                 "security": [
                     {
-                        "apiKey": []
+                        "apiAuth": []
                     }
                 ]
             }
