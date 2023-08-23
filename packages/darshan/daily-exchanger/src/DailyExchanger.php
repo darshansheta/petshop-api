@@ -2,14 +2,12 @@
 
 namespace Darshan\DailyExchanger;
 
-use Illuminate\Support\ServiceProvider;
 use GuzzleHttp\Client;
 use Illuminate\Support\Facades\Cache;
-use Darshan\DailyExchanger\Exceptions\InvalidCurrencyException;
 use Darshan\DailyExchanger\Exceptions\InvalidAmountException;
+use Darshan\DailyExchanger\Exceptions\InvalidCurrencyException;
 
-class DailyExchanger
-{
+class DailyExchanger {
     /**
      * @var string
      */
@@ -21,15 +19,15 @@ class DailyExchanger
 
     public function fetchRates(): array
     {
-        $client = new Client;
+        $client = new Client();
         $response = $client->get($this->url);
 
         $xml = simplexml_load_string($response->getBody());
         $json = json_encode($xml);
-        $array = json_decode($json, TRUE);
+        $array = json_decode($json, true);
         $rates = $array['Cube']['Cube']['Cube'];
 
-        $rates = array_reduce($rates, function($carry, $rate) {
+        $rates = array_reduce($rates, function ($carry, $rate) {
 
             $carry[$rate['@attributes']['currency']] = (float) $rate['@attributes']['rate'];
 
@@ -58,11 +56,11 @@ class DailyExchanger
 
         return Cache::get($this->cacheKey.'.rates');
     }
-   
+
    public function convertTo(string $currency, $amount)
    {
         if (!is_numeric($amount)) {
-            throw new InvalidAmountException($amount.' is not a valid amount.');   
+            throw new InvalidAmountException($amount.' is not a valid amount.');
         }
 
         $rates = $this->getRates();
@@ -74,5 +72,4 @@ class DailyExchanger
 
         return $amount * $rates[$currency];
    }
-
 }

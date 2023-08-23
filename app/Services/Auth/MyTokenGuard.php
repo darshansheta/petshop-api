@@ -2,14 +2,14 @@
 
 namespace App\Services\Auth;
 
+use App\Models\User;
+use Illuminate\Support\Str;
+use Illuminate\Http\Request;
 use Illuminate\Auth\GuardHelpers;
 use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Contracts\Auth\UserProvider;
-use Illuminate\Http\Request;
-use App\Models\User;
 use App\Services\Auth\Exceptions\MyJWTUserHasTokenException;
 use App\Services\Auth\Exceptions\MYJWTTokenExpired;
-use Illuminate\Support\Str;
 use App\Services\Auth\Exceptions\MyJWTTokenMissing;
 
 class MyTokenGuard implements Guard

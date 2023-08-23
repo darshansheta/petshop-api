@@ -31,7 +31,7 @@ class AdminUserService
 
     public function getListing(
         array $pagination = ['perPage' => 15, 'page' => 1],
-        array $orderBy = ['sortBy' => 'created_at', 'sortOrder'=> 'desc'],
+        array $orderBy = ['sortBy' => 'created_at', 'sortOrder' => 'desc'],
         array $filters = [],
     ): LengthAwarePaginator {
         $query = User::query()
@@ -45,16 +45,16 @@ class AdminUserService
 
         return $query
              ->paginate($pagination['perPage'], [
-                 'users.id',
-                 'users.uuid',
-                 'users.first_name',
-                 'users.last_name',
-                 'users.email',
-                 'users.address',
-                 'users.phone_number',
-                 'users.is_marketing',
-                 'users.created_at',
-                 'users.updated_at',
+                'users.id',
+                'users.uuid',
+                'users.first_name',
+                'users.last_name',
+                'users.email',
+                'users.address',
+                'users.phone_number',
+                'users.is_marketing',
+                'users.created_at',
+                'users.updated_at',
              ], 'page', $pagination['page']);
     }
 

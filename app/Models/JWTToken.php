@@ -26,8 +26,8 @@ class JWTToken extends Model
      */
     protected $casts = [
         'restrictions' => 'array',
-        'permissions'  => 'array',
-        'expires_at'   => 'datetime',
+        'permissions' => 'array',
+        'expires_at' => 'datetime',
         'last_used_at' => 'datetime',
         'refreshed_at' => 'datetime',
     ];
