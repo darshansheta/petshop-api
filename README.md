@@ -1,66 +1,46 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Petshop API Setup
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+1. Clone this repository
+2. Run ```composer install```
+3. Run ```cp .env.example .env```
+4. Setup your MYJWT_PUBLIC_KEY and MYJWT_PRIVATE_KEY value in .env file and generate app key
+5. Run ```php artisan migrate:fresh --seed```
+6. Run ```php artisan serve```
+7. php artisan test
+8. change .env file App_env = local && composer dump-autoload && php artisan config:cache
+9. Run ```php artisan l5-swagger:generate``` to generate swagger documentation api 
+10. To run testcase adjust value of file ```.env.testing```
+11. Run ```php artisan test```
 
-## About Laravel
+#ENV to adjust
+MYJWT_PUBLIC_KEY <br>
+MYJWT_PRIVATE_KEY <br>
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+# L3 Challenge Package
+I have build currency exchange package as local package in same repository
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+[darshan/daily-exchanger](https://github.com/darshansheta/packages/darshan/daily-exchanger)
 
-## Learning Laravel
+# Challenge Code
+- I have used Guzzle client to call external url even we can do with file_get_contents function
+- Created simple DailyExchanger simple class for all my logical functions
+- Created api route and registered above class and route with controller to expose api ```daily-exchanger/currency-to```
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+### To run testcase
+- enter to package folder ```cd packages/darshan/daily-exchanger```
+- Run command ```../../../vendor/bin/phpunit```
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 2000 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+# PHP insights score <br>
+<img width="550" alt="image" src=""> <br>
 
-## Laravel Sponsors
+# JWT
+- As primary requirement I have implemented JWT auth using [lcobucci/jwt] library
+- Created custom auth guard named `jwt` so I was to able to use default Auth facade to do authentication
+- Implementation is almost like library to doing some couple of change we can use it as package
+- Yes, as requested implemented an asymmetric ( public and private keys )
+- Also added custom claim such uuid of user in uid key of claim header
+- refer files inside `app/Services/Auth` for implementation
+- I added some Feature test that do validate token 
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
-
-### Premium Partners
-
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[Many](https://www.many.co.uk)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[OP.GG](https://op.gg)**
-- **[WebReinvent](https://webreinvent.com/?utm_source=laravel&utm_medium=github&utm_campaign=patreon-sponsors)**
-- **[Lendio](https://lendio.com)**
-
-## Contributing
-
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
-
-## Code of Conduct
-
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
