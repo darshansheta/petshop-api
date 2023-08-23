@@ -20,7 +20,7 @@ MYJWT_PRIVATE_KEY <br>
 # L3 Challenge Package
 I have build currency exchange package as local package in same repository
 
-[darshan/daily-exchanger](https://github.com/darshansheta/packages/darshan/daily-exchanger)
+[darshan/daily-exchanger](https://github.com/darshansheta/petshop-api/tree/master/packages/darshan/daily-exchanger)
 
 # Challenge Code
 - I have used Guzzle client to call external url even we can do with file_get_contents function
