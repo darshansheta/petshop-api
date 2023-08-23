@@ -33,7 +33,7 @@ I have build currency exchange package as local package in same repository
 
 
 # PHP insights score <br>
-<img width="550" alt="image" src=""> <br>
+<img width="550" alt="image" src="https://raw.githubusercontent.com/darshansheta/petshop-api/master/insights.png"> <br>
 
 # JWT
 - As primary requirement I have implemented JWT auth using [lcobucci/jwt] library
