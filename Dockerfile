@@ -1,47 +1,52 @@
-FROM php:8.1-apache
+FROM php:8.2-fpm
 
-RUN apt-get update
+# Copy composer.lock and composer.json
+COPY composer.lock composer.json /var/www/
 
-RUN apt update && apt install -y nodejs npm libpng-dev zlib1g-dev libxml2-dev libzip-dev libonig-dev zip curl unzip && docker-php-ext-configure gd \
-    && docker-php-ext-install zip \
-    && docker-php-ext-install pdo_mysql \
-    && docker-php-ext-install mysqli \
-    && pecl install redis \
-    && docker-php-ext-install -j$(nproc) gd \
-    && docker-php-ext-enable redis \
-    && docker-php-source delete
+# Set working directory
+WORKDIR /var/www
 
-RUN docker-php-ext-configure pcntl --enable-pcntl && docker-php-ext-install pcntl
+# Install dependencies
+RUN apt-get update && apt-get install -y \
+    build-essential \
+    libpng-dev \
+    libjpeg62-turbo-dev \
+    libfreetype6-dev \
+    locales \
+    zip \
+    jpegoptim optipng pngquant gifsicle \
+    vim \
+    libzip-dev \
+    unzip \
+    git \
+    curl \
+    libonig-dev
 
-RUN apt-get install -y libwebp-dev libjpeg62-turbo-dev libpng-dev libxpm-dev libfreetype6-dev
+# Clear cache
+RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 
-RUN docker-php-ext-configure gd  --with-jpeg  --with-freetype
+# Install extensions
+RUN docker-php-ext-install pdo_mysql mbstring zip exif pcntl
+RUN docker-php-ext-configure gd --enable-gd --with-freetype --with-jpeg
 RUN docker-php-ext-install gd
 
-RUN groupadd -r app -g 5500 && useradd -u 5500 -r -g app -m -d /app -s /sbin/nologin -c "App user" app && chmod 755 /var/www/
-
+# Install composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
-RUN docker-php-ext-install pdo pdo_mysql sockets
+# Copy existing application directory contents to the working directory
+COPY . /var/www
 
-WORKDIR /var/www/
+# Assign permissions of the working directory to the www-data user
+RUN chown -R www-data:www-data \
+    /var/www/storage \
+    /var/www/bootstrap/cache
 
-USER root
+# Assign writing permissions to logs and framework directories
+RUN chmod 775 storage/logs \
+    /var/www/storage/framework/sessions \
+    /var/www/storage/framework/views \
+    /var/www/tests/data 
 
-COPY --chown=www-data:www-data . /var/www/
-
-RUN cp -rf /var/www/docker/default.conf /etc/apache2/sites-enabled/000-default.conf
-
-RUN chown -R www-data:www-data /var/www
-
-RUN a2enmod rewrite
-RUN service apache2 restart
-
-RUN php artisan storage:link
-
-CMD apache2-foreground
-
-
-
-
-
+# Expose port 9000 and start php-fpm server
+EXPOSE 9000
+CMD ["php-fpm"]
